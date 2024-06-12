@@ -195,7 +195,8 @@ async def async_get_state(config, coords) -> dict:
         "event_expires": None,
         "display_desc": None,
         "spoken_desc": None,
-        "instruction": None
+        "instruction": None,
+        "body": None
     }
     headers = {"User-Agent": USER_AGENT, "Accept": "application/ld+json"}
     data = None
@@ -244,7 +245,8 @@ async def async_get_alerts(zone_id: str = "", gps_loc: str = "") -> dict:
         "event_expires": None,
         "display_desc": None,
         "spoken_desc": None,
-        "instruction": None
+        "instruction": None,
+        "body": None
     }
     headers = {"User-Agent": USER_AGENT, "Accept": "application/geo+json"}
     data = None
@@ -274,6 +276,7 @@ async def async_get_alerts(zone_id: str = "", gps_loc: str = "") -> dict:
         display_desc = ""
         spoken_desc = ""
         instructions = ""
+        body = ""
         features = data["features"]
         for alert in features:
             event = alert["properties"]["event"]
@@ -313,6 +316,11 @@ async def async_get_alerts(zone_id: str = "", gps_loc: str = "") -> dict:
                     instruction,
                 )
             )
+
+            if body != "":
+                body += "\n\n-\n\n"
+            
+            body += description
 
             if instructions != "":
                 instructions += "\n\n-\n\n"
@@ -375,5 +383,6 @@ async def async_get_alerts(zone_id: str = "", gps_loc: str = "") -> dict:
             values["display_desc"] = display_desc
             values["spoken_desc"] = spoken_desc
             values["instruction"] = instructions
+            values["body"] = body
 
     return values

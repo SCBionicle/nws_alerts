@@ -150,6 +150,7 @@ class NWSAlertSensor(CoordinatorEntity):
         attrs["display_desc"] = self.coordinator.data["display_desc"]
         attrs["spoken_desc"] = self.coordinator.data["spoken_desc"]
         attrs["instruction"] = self.coordinator.data["instruction"]
+        attrs["body"] = self.coordinator.data["body"]
 
         return attrs
 
