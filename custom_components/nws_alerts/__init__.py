@@ -331,6 +331,8 @@ async def async_get_alerts(zone_id: str = "", gps_loc: str = "") -> dict:
 
             if instruction is not None and instruction != "None":
                 instructions += instruction
+            else:
+                instructions += " "
             
             if event_id != "":
                 event_id += " - "
