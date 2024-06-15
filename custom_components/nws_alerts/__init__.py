@@ -196,7 +196,8 @@ async def async_get_state(config, coords) -> dict:
         "display_desc": None,
         "spoken_desc": None,
         "instruction": None,
-        "body": None
+        "body": None,
+        "event_urgency": None
     }
     headers = {"User-Agent": USER_AGENT, "Accept": "application/ld+json"}
     data = None
@@ -246,7 +247,8 @@ async def async_get_alerts(zone_id: str = "", gps_loc: str = "") -> dict:
         "display_desc": None,
         "spoken_desc": None,
         "instruction": None,
-        "body": None
+        "body": None,
+        "event_urgency": None
     }
     headers = {"User-Agent": USER_AGENT, "Accept": "application/geo+json"}
     data = None
@@ -277,6 +279,7 @@ async def async_get_alerts(zone_id: str = "", gps_loc: str = "") -> dict:
         spoken_desc = ""
         instructions = ""
         body = ""
+        event_urgency = ""
         features = data["features"]
         for alert in features:
             event = alert["properties"]["event"]
@@ -293,6 +296,7 @@ async def async_get_alerts(zone_id: str = "", gps_loc: str = "") -> dict:
             severity = alert["properties"]["severity"]
             certainty = alert["properties"]["certainty"]
             expires = alert["properties"]["expires"]
+            urgency = alert["properties"]["urgency"]
 
             # if event in events:
             #    continue
@@ -353,6 +357,11 @@ async def async_get_alerts(zone_id: str = "", gps_loc: str = "") -> dict:
 
             event_expires += expires
 
+            if event_urgency != "":
+                event_urgency += " - "
+            
+            event_urgency += urgency
+
         if headlines:
             num_headlines = len(headlines)
             i = 0
@@ -384,5 +393,6 @@ async def async_get_alerts(zone_id: str = "", gps_loc: str = "") -> dict:
             values["spoken_desc"] = spoken_desc
             values["instruction"] = instructions
             values["body"] = body
+            values["event_urgency"] = event_urgency
 
     return values
