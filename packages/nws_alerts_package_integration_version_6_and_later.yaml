@@ -2,6 +2,8 @@
 #
 #   This is the package for NWS ALERTS USING THE CUSTOM COMPONENT
 #
+#   This is for use with the default sensor entity_id created with the integration version 6 or later 
+#
 #################################################################################
 
 ## For testing the API
@@ -18,9 +20,9 @@ binary_sensor:
       nws_alerts_are_active:
         friendly_name: NWS Alerts Are Active
         value_template: >
-          {{ states('sensor.nws_alerts') | int(0) > 0 }}
+          {{ states('sensor.nws_alerts_alerts') | int(0) > 0 }}
         icon_template: >-
-          {% if states('sensor.nws_alerts') | int(0) > 0 %}
+          {% if states('sensor.nws_alerts_alerts') | int(0) > 0 %}
             mdi:weather-lightning
           {% else %}
             mdi:weather-sunny
@@ -28,17 +30,17 @@ binary_sensor:
       
 
 ########################  AUTOMATION  ###########################################
-```
+
 automation:
 
   - alias: NWS - Mobile App Notifications
     id: nws_mobile_app_notifications
     trigger:
       - platform: state
-        entity_id: sensor.nws_alerts
+        entity_id: sensor.nws_alerts_alerts
     condition:
       - condition: numeric_state
-        entity_id: sensor.nws_alerts
+        entity_id: sensor.nws_alerts_alerts
         above: 0
     action:
       - repeat:
@@ -64,10 +66,10 @@ automation:
     id: nws_persistent_notifications
     trigger:
       - platform: state
-        entity_id: sensor.nws_alerts
+        entity_id: sensor.nws_alerts_alerts
     condition: 
       - condition: numeric_state
-        entity_id: sensor.nws_alerts
+        entity_id: sensor.nws_alerts_alerts
         above: 0
     action:
       - repeat:
@@ -97,10 +99,10 @@ automation:
     description: ""
     trigger:
       - platform: state
-        entity_id: sensor.nws_alerts
+        entity_id: sensor.nws_alerts_alerts
     condition:
       - condition: numeric_state
-        entity_id: sensor.nws_alerts
+        entity_id: sensor.nws_alerts_alerts
         above: 0
     action:
       - repeat:
@@ -140,7 +142,7 @@ script:
     alias: NWS Alerts Persistent Notifications
     sequence:
       - service: >
-          {% if states('sensor.nws_alerts') != '0' %}
+          {% if states('sensor.nws_alerts_alerts') != '0' %}
             persistent_notification.create
           {% endif %}
         data:
